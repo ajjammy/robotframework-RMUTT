@@ -17,15 +17,16 @@ ${button-ยืนยัน OTP}          button-otp
 *** Test Cases ***
 โอนเงินไปบัญชีผู้อื่นภายใน e-wallet
    เปิดหน้าโอนเงิน
-   แสดงรายการบัญชีของผู้โอน
-   เลือกบัญชีผู้โอน
-   แสดงยอดคงเหลือของบัญชี
-   กรอกเลขบัญชีผู้รับ
-   กรอกจำนวนเงินที่ต้องการโอน
+   แสดงรายการบัญชีของผู้โอน         ไกรมน  มณีศิลป์    1101041    1101042
+   เลือกบัญชีผู้โอน                  1101041
+   แสดงยอดคงเหลือของบัญชี          44,000.00
+   กรอกเลขบัญชีผู้รับ                1021110
+   กรอกจำนวนเงินที่ต้องการโอน       1,000.00
    กดยืนยันการโอน
-   ระบุหมายเลข OTP
+   แสดงเลข reference OTP        0812
+   ระบุหมายเลข OTP               204100
    ยืนยัน OTP
-   แสดงหลักฐานการโอนเงินสำเร็จ
+   แสดงหลักฐานการโอนเงินสำเร็จ     28/03/2561    16:16    1101041    1021110    1,000.00    16523082616100001
 
 
 *** Keywords ***
@@ -33,36 +34,46 @@ ${button-ยืนยัน OTP}          button-otp
    Open Browser    ${URL}    ${BROWSER}
 
 แสดงรายการบัญชีของผู้โอน
-   Element Text Should Be    ${ชื่อนามสกุลผู้โอน}    ไกรมน  มณีศิลป์
-   Page Should Contain       1101041
-   Page Should Contain       1101042
+   [Arguments]     ${ชื่อนามสกุลผู้โอน}    ${เลขบัญชีที่ 1}    ${เลขบัญชีที่ 1}
+   Element Text Should Be    ${label-ชื่อนามสกุลผู้โอน}    ${ชื่อนามสกุลผู้โอน}
+   Page Should Contain       ${เลขบัญชีที่ 1}
+   Page Should Contain       ${เลขบัญชีที่ 2}
 
 เลือกบัญชีผู้โอน
-   Select From List By Value    ${dropdown-บัญชีผู้โอน}       1101041
+   [Arguments]     ${บัญชีผู้โอน}
+   Select From List By Value    ${dropdown-บัญชีผู้โอน}       ${บัญชีผู้โอน}
 
 แสดงยอดคงเหลือของบัญชี
-   Element Text Should Be       ${label-ยอดคงเหลือผู้โอน}    ไกรมน  มณีศิลป์
+   [Arguments]     ${ยอดคงเหลือผู้โอน}
+   Element Text Should Be       ${label-ยอดคงเหลือผู้โอน}    ${ยอดคงเหลือผู้โอน}
 
 กรอกเลขบัญชีผู้รับ
-   Input Text       ${textbox-เลขบัญชีผู้รับ}      1021110
+   [Arguments]     ${เลขบัญชีผู้รับ}
+   Input Text      ${textbox-เลขบัญชีผู้รับ}      ${เลขบัญชีผู้รับ}
 
 กรอกจำนวนเงินที่ต้องการโอน
-   Input Text       ${textbox-จำนวนเงินโอน}    1,000.00
+   [Arguments]     ${จำนวนเงินโอน}
+   Input Text      ${textbox-จำนวนเงินโอน}    ${จำนวนเงินโอน}
 
 กดยืนยันการโอน
-   Click Element    ${button-ยืนยันการโอน}
+   Click Element   ${button-ยืนยันการโอน}
+
+แสดงเลข reference OTP
+   [Arguments]     ${reference}
+   Element Text Should Be       ${label-reference}
 
 ระบุหมายเลข OTP
-   Element Text Should Be       ${label-reference}    0812
-   Input Text                   ${textbox-otp}        204100
+   [Arguments]     ${otp}
+   Input Text      ${textbox-otp}        ${otp}
 
 ยืนยัน OTP
    Click Element    ${button-ยืนยัน OTP}
 
 แสดงหลักฐานการโอนเงินสำเร็จ
-   Page Should Contain       28/03/2561
-   Page Should Contain       16:16
-   Page Should Contain       1101041
-   Page Should Contain       1021110
-   Page Should Contain       1,000.00
-   Page Should Contain       16523082616100001
+   [Arguments]     ${transfer-date}   ${transfer-time}   ${เลขบัญชีผู้โอน}   ${เลขบัญชีผู้รับ}   ${จำนวนเงินโอน}   ${หมายเลขอ้างอิงการโอน}
+   Page Should Contain       ${transfer-date}
+   Page Should Contain       ${transfer-time}
+   Page Should Contain       ${เลขบัญชีผู้โอน}
+   Page Should Contain       ${เลขบัญชีผู้รับ}
+   Page Should Contain       ${จำนวนเงินโอน}
+   Page Should Contain       ${หมายเลขอ้างอิงการโอน}
